@@ -12,7 +12,7 @@ const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 function escutaMensagensEmTempoReal(adicionaMensagem) {
     return supabaseClient
         .from('mensagens')
-        .on('INSERT', ({ respostaLive }) => {
+        .on('INSERT', (respostaLive) => {
             adicionaMensagem(respostaLive.new);
         }).subscribe();
 }
@@ -44,8 +44,8 @@ export default function ChatPage() {
                 setChat(data);
             });
         const subscription = escutaMensagensEmTempoReal((novaMensagem) => {
-            console.log('Nova mensagem:', novaMensagem);
-            console.log('listaDeMensagens:', listaDeMensagens);
+            //console.log('Nova mensagem:', novaMensagem);
+            //console.log('listaDeMensagens:', listaDeMensagens);
             // Quero reusar um valor de referencia (objeto/array) 
             // Passar uma função pro setState
 
@@ -53,8 +53,8 @@ export default function ChatPage() {
             //     novaMensagem,
             //     ...listaDeMensagens
             // ])
-            setListaDeMensagens((valorAtualDaLista) => {
-                console.log('valorAtualDaLista:', valorAtualDaLista);
+            setChat((valorAtualDaLista) => {
+                //console.log('valorAtualDaLista:', valorAtualDaLista);
                 return [
                     novaMensagem,
                     ...valorAtualDaLista,
@@ -271,7 +271,12 @@ function MessageList(props) {
                         {/*mensagem.texto.startsWith(':sticker: ').toString()*/}
                         {mensagem.texto.startsWith(':sticker: ')
                             ? (
-                                <Image src={mensagem.texto.replace(':sticker: ', '')} />
+                                <Image styleSheet={{
+                                    maxWidth:'200px',
+                                    maxHeight:'150px',
+                                    width: 'auto',
+                                    height: 'auto',
+                                }} src={mensagem.texto.replace(':sticker: ', '')} />
                             )
                             : (
                                 mensagem.texto
