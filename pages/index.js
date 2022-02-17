@@ -1,51 +1,7 @@
+import React from 'react';
 import appConfig from '../config.json';
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
-
-function GlobalStyle() {
-    return (
-      <style global jsx>{`
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        list-style: none;
-      }
-      body {
-        font-family: 'Open Sans', sans-serif;
-      }
-      /* App fit Height */ 
-      html, body, #__next {
-        min-height: 100vh;
-        display: flex;
-        flex: 1;
-      }
-      #__next {
-        flex: 1;
-      }
-      #__next > * {
-        flex: 1;
-      }
-      /* ./App fit Height */ 
-    `}</style>
-    );
-  }
-
-function Titulo(props) {
-    const Tag = props.tag;
-    return (
-        <>
-        <Tag>{props.children}</Tag>
-        <style jsx>{`
-            ${Tag} {
-                color: ${appConfig.theme.colors.neutrals["100"]};
-                font-size: 24px;
-                font-weight: 600;
-                }
-            `}</style> 
-        </>
-    );
-}
-
+import { useRouter } from 'next/router';
 
 /*
 function HomePage() {
@@ -60,17 +16,32 @@ function HomePage() {
    
 export default HomePage
 */
+function Titulo(props) {
+  const Tag = props.tag;
+  return (
+      <>
+      <Tag>{props.children}</Tag>
+      <style jsx>{`
+          ${Tag} {
+              color: ${appConfig.theme.colors.neutrals["100"]};
+              font-size: 24px;
+              font-weight: 600;
+              }
+          `}</style> 
+      </>
+  );
+}
 
 export default function PaginaInicial() {
-    const username = 'lucassilva1998';
-  
+    //const username = 'lucassilva1998';
+    const [username, setUsername] = React.useState('lucassilva1998');
+    const roteamento = useRouter();
     return (
       <>
-        <GlobalStyle />
         <Box
           styleSheet={{
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            backgroundColor: appConfig.theme.colors.primary[300],
+            backgroundColor: appConfig.theme.colors.primary[100],
             backgroundImage: 'url(https://virtualbackgrounds.site/wp-content/uploads/2020/12/bright-gaming-room-setup-1536x864.jpg)',
             backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
           }}
@@ -93,6 +64,12 @@ export default function PaginaInicial() {
             {/* Formulário */}
             <Box
               as="form"
+              onSubmit={function (infosDoEvento) {
+                infosDoEvento.preventDefault();
+                //roteamento.push('/chat?username=' + username);
+                roteamento.push(`/chat?username=${username}`);
+                // window.location.href = './chat';
+              }}
               styleSheet={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                 width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
@@ -100,10 +77,17 @@ export default function PaginaInicial() {
             >
               <Titulo tag="h2">Bem vindo(a) de volta!</Titulo>
               <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[200] }}>
-                Discord - Alura Geek
+               {appConfig.name}
               </Text>
   
               <TextField
+                value={username}
+                onChange={function (event){
+                  //qual o valor?
+                  const valor = event.target.value;
+                  //trocando o valor
+                  setUsername(valor);
+                }}
                 fullWidth
                 textFieldColors={{
                   neutral: {
